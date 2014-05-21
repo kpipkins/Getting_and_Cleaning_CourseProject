@@ -33,10 +33,11 @@ names(results) <- features[goodcolumns,2]
 ## Step 3 says to use descriptive activity names which means replace
 ## or add the name from activity_labels to the activities dataset 
 ## (originally Y) where the numbers matched
-act_labels <- read.table("activity_labels.txt")
-activities <- merge(activities,act_labels,by.x="V1",by.y="V1")
-activities <- gsub("_","",activities[,2])
-activities <- tolower(as.character(activities))
+names(activities) <- "ActivityId"
+act_labels <- read.table("activity_labels.txt", as.is = TRUE, col.names = c("ActivityId", "ActivityName"))
+activities <- join(activities,act_labels,by="ActivityId")
+activities$ActivityName <- gsub("_","",activities$ActivityName)
+activities$ActivityName <- tolower(as.character(activities$ActivityName))
 
 ## Steps 4 says the same thing as Step 3, I'm using this step to
 ## scrub the names of the results column names and create any missing 
@@ -48,12 +49,12 @@ tidy_data1 <- cbind(subjects,activities,results)
 write.table(tidy_data1,"tidy_data_MEASURES.txt")
 
 ## for the sake of memory we can now remove any uneeded objects
-rm(act_labels,features,results,subjects)
+## rm(act_labels,features,results,subjects)
 
 ## Step 5 wants a subset of the larger data set that only consist of the
 ## average for each variable (columns 3 to 68) for each subject/activity 
 library(data.table)
 data <- data.table(tidy_data1)
-tidy_data2 <- data[, lapply(.SD, mean), by=c("subject","activities")]
+tidy_data2 <- data[, lapply(.SD, mean), by=c("subject","ActivityName")]
 tidy_data2 <- tidy_data2[order(tidy_data2$subject),]
 write.table(tidy_data2,"tidy_data_FINAL.txt")

@@ -31,8 +31,8 @@ For the purpose of this analysis we are downloading 8 files from the dataset.
 
 ## Resulting Data
 As a result of our analysis we create two files
-- *tidy_data_MEASURES.txt* consist of 10299 rows (all records) and 68 columns (subject, activity, 66 mean and standard deviation columns from the measurement variables)
-- *tidy_data_FINAL.txt* consist of 35 rows (each subject/activity combination) for 68 columns (subject, activity, 66 averages of the mean and standard deviation values) **Note: There are 180 potential matches between our 30 subjects and 6 activities, however not every subject completed every activity and therefore there are only 35 matches.**
+- *tidy_data_MEASURES.txt* consist of 10299 rows (all records) and 68 columns (subject, activityid, activityname, and 66 mean and standard deviation columns from the measurement variables)
+- *tidy_data_FINAL.txt* consist of 180 rows (each subject/activity combination) for 69 columns (subject, activityid, activityname, and 66 averages of the mean and standard deviation values) 
 
 ## Variables in Resulting Data
 - *subject* is the number of the subject for the original X data sets
