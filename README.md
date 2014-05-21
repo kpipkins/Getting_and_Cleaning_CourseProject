@@ -54,10 +54,12 @@ The next step scrubs the activity dataset (originally Y) to replace activity cod
 ## Step 3 says to use descriptive activity names which means replace or add
 ## the name from activity_labels to the activities dataset (originally Y)
 ## where the numbers matched
-act_labels <- read.table("activity_labels.txt")
-activities <- merge(activities, act_labels, by.x = "V1", by.y = "V1")
-activities <- gsub("_", "", activities[, 2])
-activities <- tolower(as.character(activities))
+names(activities) <- "ActivityId"
+act_labels <- read.table("activity_labels.txt", as.is = TRUE, col.names = c("ActivityId", 
+    "ActivityName"))
+activities <- join(activities, act_labels, by = "ActivityId")
+activities$ActivityName <- gsub("_", "", activities$ActivityName)
+activities$ActivityName <- tolower(as.character(activities$ActivityName))
 ```
 
 ## Scrub remaining fields, bind and write data
@@ -86,6 +88,14 @@ Finally, we take the above cleaned and tidy dataset and calculate the averages f
 library(data.table)
 data <- data.table(tidy_data1)
 tidy_data2 <- data[, lapply(.SD, mean), by = c("subject", "activities"), ]
+```
+
+```
+## Error: column or expression 2 of 'by' or 'keyby' is type list. Do not
+## quote column names. Usage: DT[,sum(colC),by=list(colA,month(colB))]
+```
+
+```r
 tidy_data2 <- tidy_data2[order(tidy_data2$subject), ]
 write.table(tidy_data2, "tidy_data_FINAL.txt")
 ```
